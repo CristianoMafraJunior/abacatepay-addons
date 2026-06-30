@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Cristiano Mafra Junior -->
+<!-- License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_company_view_form_abacatepay" model="ir.ui.view">
+        <field name="name">res.company.form.abacatepay</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="AbacatePay" name="abacatepay">
+                    <group string="API Credentials">
+                        <group>
+                            <field name="abacatepay_api_key" password="True" />
+                        </group>
+                    </group>
+                    <group string="Settings">
+                        <group>
+                            <field name="abacatepay_dev_mode" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
