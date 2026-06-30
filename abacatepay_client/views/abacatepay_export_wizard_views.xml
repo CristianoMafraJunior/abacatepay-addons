@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Cristiano Mafra Junior -->
+<!-- License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="view_abacatepay_export_wizard_form" model="ir.ui.view">
+        <field name="name">abacatepay.export.wizard.form</field>
+        <field name="model">abacatepay.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Contacts to AbacatePay">
+                <group>
+                    <field name="export_all" />
+                    <field
+                        name="partner_ids"
+                        widget="many2many_tags"
+                        attrs="{
+                            'invisible': [('export_all', '=', True)],
+                            'required': [('export_all', '=', False)]
+                        }"
+                    />
+                    <field name="skip_synced" />
+                </group>
+                <footer>
+                    <button
+                        name="action_export"
+                        type="object"
+                        string="Export"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_abacatepay_export_wizard" model="ir.actions.act_window">
+        <field name="name">Export Contacts</field>
+        <field name="res_model">abacatepay.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

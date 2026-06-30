@@ -1,0 +1,1 @@
+Sincronização de clientes do Odoo com a AbacatePay

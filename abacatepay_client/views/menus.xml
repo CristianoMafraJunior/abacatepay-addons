@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Cristiano Mafra Junior -->
+<!-- License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <menuitem
+        id="menu_abacatepay_root"
+        name="AbacatePay"
+        parent="contacts.menu_contacts"
+        sequence="50"
+    />
+    <menuitem
+        id="menu_abacatepay_customers"
+        name="Customers"
+        parent="menu_abacatepay_root"
+        action="action_abacatepay_customer"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_abacatepay_export"
+        name="Export Contacts"
+        parent="menu_abacatepay_root"
+        action="action_abacatepay_export_wizard"
+        sequence="20"
+    />
+</odoo>
