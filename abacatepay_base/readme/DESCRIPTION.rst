@@ -1,0 +1,1 @@
+Módulo base para integração com a API da AbacatePay
