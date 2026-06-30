@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Cristiano Mafra Junior -->
+<!-- License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <!-- AbacatePay tab on partner form -->
+    <record id="res_partner_view_form_abacatepay" model="ir.ui.view">
+        <field name="name">res.partner.form.abacatepay</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="AbacatePay" name="abacatepay">
+                    <group>
+                        <group string="Sync Info">
+                            <field name="abacatepay_id" />
+                            <field
+                                name="abacatepay_state"
+                                widget="badge"
+                                decoration-success="abacatepay_state == 'synced'"
+                                decoration-danger="abacatepay_state == 'error'"
+                                decoration-info="abacatepay_state == 'draft'"
+                            />
+                            <field name="abacatepay_sync_date" />
+                        </group>
+                    </group>
+                    <group
+                        string="Error"
+                        attrs="{'invisible': [('abacatepay_state', '!=', 'error')]}"
+                    >
+                        <field name="abacatepay_error_message" nolabel="1" />
+                    </group>
+                    <div class="o_row mt8">
+                        <button
+                            name="action_abacatepay_sync"
+                            type="object"
+                            string="Sync to AbacatePay"
+                            class="btn btn-primary"
+                            attrs="{'invisible': [('abacatepay_state', '=', 'synced')]}"
+                        />
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Dedicated list view for AbacatePay customers menu -->
+    <record id="res_partner_view_tree_abacatepay" model="ir.ui.view">
+        <field name="name">res.partner.tree.abacatepay</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-danger="abacatepay_state == 'error'"
+                decoration-success="abacatepay_state == 'synced'"
+                decoration-muted="abacatepay_state == 'draft'"
+            >
+                <field name="name" />
+                <field name="email" />
+                <field name="vat" string="Tax ID" />
+                <field name="abacatepay_id" />
+                <field
+                    name="abacatepay_state"
+                    widget="badge"
+                    decoration-success="abacatepay_state == 'synced'"
+                    decoration-danger="abacatepay_state == 'error'"
+                    decoration-info="abacatepay_state == 'draft'"
+                />
+                <field name="abacatepay_sync_date" />
+                <button
+                    name="action_abacatepay_sync"
+                    type="object"
+                    string="Sync"
+                    icon="fa-refresh"
+                    attrs="{'invisible': [('abacatepay_state', '=', 'synced')]}"
+                />
+                <button
+                    name="action_abacatepay_delete"
+                    type="object"
+                    string="Remove"
+                    icon="fa-trash"
+                    attrs="{'invisible': [('abacatepay_state', '!=', 'synced')]}"
+                    confirm="Remove this contact from AbacatePay? This cannot be undone."
+                />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view for AbacatePay customers menu -->
+    <record id="res_partner_view_search_abacatepay" model="ir.ui.view">
+        <field name="name">res.partner.search.abacatepay</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="AbacatePay Customers">
+                <field name="name" />
+                <field name="email" />
+                <field name="vat" string="Tax ID" />
+                <field name="abacatepay_id" string="AbacatePay ID" />
+                <filter
+                    string="Synced"
+                    name="synced"
+                    domain="[('abacatepay_state', '=', 'synced')]"
+                />
+                <filter
+                    string="Not Synced"
+                    name="not_synced"
+                    domain="[('abacatepay_state', '=', 'draft')]"
+                />
+                <filter
+                    string="Errors"
+                    name="errors"
+                    domain="[('abacatepay_state', '=', 'error')]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Status"
+                        name="group_state"
+                        context="{'group_by': 'abacatepay_state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for the AbacatePay > Customers menu -->
+    <record id="action_abacatepay_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="view_ids"
+            eval="[(5, 0, 0),
+                   (0, 0, {'view_mode': 'tree', 'view_id': ref('res_partner_view_tree_abacatepay')}),
+                   (0, 0, {'view_mode': 'form', 'view_id': ref('base.view_partner_form')})]"
+        />
+        <field name="search_view_id" ref="res_partner_view_search_abacatepay" />
+        <field name="context">{'search_default_synced': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No customers synced yet.
+            </p>
+            <p>Use <strong
+                >Export Contacts</strong> to sync your contacts with AbacatePay.</p>
+        </field>
+    </record>
+
+</odoo>
